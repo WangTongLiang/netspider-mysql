@@ -1,0 +1,20 @@
+{
+  "name": "netspider",
+  "version": "1.0.0",
+  "description": "网络��爬虫",
+  "main": "app.js",
+  "scripts": {
+    "test": "supervisor app"
+  },
+  "author": "王同亮 wangtongliangh916@163.com",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "0.7.2",
+    "cheerio": "0.12.3",
+    "request": "2.27.0",
+    "async": "0.2.9",
+    "mysql": "2.x",
+    "express": "^4.14.0",
+    "ejs": "0.8.4"
+  }
+}
