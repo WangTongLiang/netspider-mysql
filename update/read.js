@@ -38,6 +38,7 @@ exports.classList = function (url, callback){
             classList.push(item);
         }
         })
+        callback(null,classList);
         })
 };
 /**
@@ -57,7 +58,7 @@ exports.articleList = function (url, callback){
         $('.articleList .articleCell').each(function(){
             var $me = $(this);
             var $title = $me.find('.atc_title a');
-            var $time = $me.find('atc_tm');
+            var $time = $me.find('.atc_tm');
             var item = {
                 title: $title.text().trim(),
                 url: $title.attr('href'),
@@ -70,11 +71,10 @@ exports.articleList = function (url, callback){
             articleList.push(item);
         }
         })
-
         //检查是否有下一页
         var nextUrl = $('.SG_pgnext a').attr('href');
         if(nextUrl){
-            readArticleList(nextUrl, function(err, articleList2){
+            exports.articleList(nextUrl, function(err, articleList2){
                 if(err) return callback(err);
                 //合并结果
                 callback(null, articleList.concat(articleList2));

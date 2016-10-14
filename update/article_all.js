@@ -28,7 +28,10 @@ function readArticleList(url, callback){
                 time: $time.text().trim()
             };
         // 从url中取出分类的id
+        var sallId = [];
         var s = item.url.match(/blog_([a-zA-Z0-9]+)\.html/);//match 返回一个正则匹配的数组
+        sallId.push(s[1]);
+        console.log(sallId);
         if (Array.isArray(s)){
             item.id = s[1];
             articleList.push(item);
@@ -79,7 +82,6 @@ readArticleList('http://blog.sina.com.cn/s/articlelist_1776757314_0_1.html', fun
         readArticleDetail(article.url, function(err, detail){
             if(err) console.error(err.stack);
             //直接显示
-            console.log(detail);
 
             //需要调用next()来返回
             next();

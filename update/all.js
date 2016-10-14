@@ -5,14 +5,12 @@ const save = require('./save');
 const debug = require('debug')('blog:update:all');
 
 var classList;
-console.log(save);
 var articleList = {};
 async.series([
     //获取文章分类列表
     function(done){
         read.classList(config.sinaBlog.url, function(err, list){
             classList = list;
-            console.log(classList);
             done(err);
         })
     },
@@ -22,23 +20,28 @@ async.series([
     },
     //获取所有文章分类下的文章列表
     function(done){
+        console.log("获取所有文章分类下的文章列表");
         async.eachSeries(classList, function(c, next){
             read.articleList(c.url, function(err, list){
+                console.log(list.length);
                 articleList[c.id] = list;
+
                 next(err);
             })
         },done);
     },
     //保存文章列表
     function(done){
+        console.log("保存文章列表");
         async.eachSeries(Object.keys(articleList), function (classId, next){
-            save.articleList(classId,articleList(classId), next);
+            save.articleList(classId,articleList[classId], next);
         }, done);
     },
     //保存文章数量
     function(done){
+        console.log("保存分类数据all");
         async.eachSeries(Object.keys(articleList), function (classId, next){
-            save.articleCount(classId,articleList(classId).length, next);
+            save.articleCount(classId,articleList[classId].length, next);
         }, done);
     },
     //重新整理文章列表，把重复的文章去掉
@@ -69,7 +72,7 @@ async.series([
                 read.articleDetail(item.url, function (err, ret){
                     if(err) return next(err);
 
-                    save.articleDetail(item.id, ret,tags, ret.content, function(err){
+                    save.articleDetail(item.id, ret.tags, ret.content, function(err){
                         if(err) return next(err);
                         save.articleCTags(item.id, ret.tags, next);
                     })
@@ -78,9 +81,9 @@ async.series([
         }, done);
     }
 ], function(err){
+    
     if(err) console.error(err.stack);
-
     console.log('完成');
 
     process.exit(0);
-})
+});
